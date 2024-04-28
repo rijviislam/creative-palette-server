@@ -47,8 +47,9 @@ async function run() {
       const query = { _id: new ObjectId(id) };
       const result = await craftCollection.findOne(query);
       res.send(result);
-      console.log(result);
     });
+
+
     // app.get(`/craftitem/:subcategory_Name`, async(req, res) => {
     //     console.log(req.params.subcategory_Name);
     //     const query = { subcategory_Name: "Craft" };
@@ -59,6 +60,8 @@ async function run() {
     //     const result = await craftCollection.findOne(query,options);
     //     console.log(result);
     // })
+
+
 
     app.get("/craftitem/:id", async (req, res) => {
       const id = req.params.id;
@@ -79,12 +82,8 @@ async function run() {
       }
     });
 
-
-
-
     app.post("/craftitem", async (req, res) => {
       const newCraftItem = req.body;
-      console.log(newCraftItem);
       const result = await craftCollection.insertOne(newCraftItem);
       res.send(result);
     });
@@ -116,7 +115,6 @@ async function run() {
       const query = { _id: new ObjectId(id) };
       const result = await craftCollection.deleteOne(query);
       res.send(result);
-      console.log(result);
     });
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
