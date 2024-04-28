@@ -26,7 +26,9 @@ async function run() {
     await client.connect();
 
     const craftCollection = client.db("craftItemDB").collection("craftItem");
-    const artcraftCollection = client.db("craftItemDB").collection("ArtAndCraftCategories");
+    const artcraftCollection = client
+      .db("craftItemDB")
+      .collection("ArtAndCraftCategories");
 
     app.get("/craftitem", async (req, res) => {
       const cursor = craftCollection.find();
@@ -36,21 +38,14 @@ async function run() {
     app.get("/artandcraft", async (req, res) => {
       const cursor = artcraftCollection.find();
       const result = await cursor.toArray();
-      console.log(result)
       res.send(result);
     });
 
-    // app.get('/craftitem_artandcraft', async(req,res) => {
-    //   const cursor = craftCollection.find();
-    //   const result = await cursor.toArray();
-    //   console.log(result);
-      
-    // })
 
     app.get("/craftitem/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
-      const result = await craftCollection.findOne(query); 
+      const result = await craftCollection.findOne(query);
       res.send(result);
       console.log(result);
     });
@@ -65,27 +60,27 @@ async function run() {
     //     console.log(result);
     // })
 
+    app.get("/craftitem/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await craftCollection.findOne(query);
+      res.send(result);
+    });
 
-    // app.get("/craftitem_category/:email", async (req, res) => {
-    //   // const result = await craftCollection.findOne({email: req.params.email});
-    //   // res.send(result);
-    //   const email = req.query.email;
-    //   const cursor = {email: email}
-    //   const result = await craftCollection.find(cursor).toArray();
-    //   // console.log(result)
-    //   res.send(result)
-    // })
 
-    app.get("/craftitem", async(req, res) => {
+    app.get("/craftitem", async (req, res) => {
       const email = req.query.email;
-      if(email) {
-        const result = await craftCollection.find({email: email}).toArray();
-        res.send(result)
-      }else {
+      if (email) {
+        const result = await craftCollection.find({ email: email }).toArray();
+        res.send(result);
+      } else {
         const result2 = await craftCollection.find().toArray();
-        res.send(result2)
+        res.send(result2);
       }
-    })
+    });
+
+
+
 
     app.post("/craftitem", async (req, res) => {
       const newCraftItem = req.body;
@@ -94,10 +89,35 @@ async function run() {
       res.send(result);
     });
 
-    app.delete('craftitem/:id', async(req, res) => {
+    app.put('/craftitemupdate/:id', async(req, res) => {
       const id = req.params.id;
-      console.log(id)
+      const filter = {_id : new ObjectId(id)};
+      const options = { upsert: true };
+      const updatedProduct = req.body;
+      const  updatedProductItem = {
+        $set: {
+          image: updatedProduct.image,
+          name: updatedProduct.name,
+          price: updatedProduct.price,
+          processing_time: updatedProduct.processing_time,
+          rating:updatedProduct.rating,
+          shortdescription: updatedProduct.shortdescription,
+          stockStatus: updatedProduct.stockStatus,
+          subcategory_Name: updatedProduct.subcategory_Name,
+          customization: updatedProduct.customization,
+        }
+      }
+      const result = await craftCollection.updateOne(filter, updatedProductItem, options);
+      res.send(result);
     })
+
+    app.delete("/craftitem/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await craftCollection.deleteOne(query);
+      res.send(result);
+      console.log(result);
+    });
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
