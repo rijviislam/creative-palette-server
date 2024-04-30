@@ -11,7 +11,6 @@ app.use(express.json());
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.yy4jwyq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
@@ -22,7 +21,6 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
 
     const craftCollection = client.db("craftItemDB").collection("craftItem");
@@ -55,28 +53,6 @@ async function run() {
       const result = await craftCollection.findOne(query);
       res.send(result);
     });
-
-
-
-   
-    // app.get(`/craftitem/:subcategory_Name`, async(req, res) => {
-    //     console.log(req.params.subcategory_Name);
-    //     const query = { subcategory_Name: "Craft" };
-    //     const options = {
-    //         sort: { "imdb.rating": -1 },
-    //         projection: { _id: 0, rating:4.3, title: 1, imdb: 1 },
-    //       };
-    //     const result = await craftCollection.findOne(query,options);
-    //     console.log(result);
-    // })
-
-    // app.get("/craftitem/:subcategory_Name", async (req, res) => {
-    //   const subcategory_Name = req.params.subcategory_Name;
-    //   const query = { subcategory_Name: subcategory_Name };
-    //   const result = await craftCollection.find(query).toArray();
-    //   res.send(result);
-    //   // console.log(result)
-
     
     app.get("/craftitem", async (req, res) => {
       const email = req.query.email;
@@ -127,7 +103,6 @@ async function run() {
       const result = await craftCollection.deleteOne(query);
       res.send(result);
     });
-    // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
