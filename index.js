@@ -6,7 +6,11 @@ const port = process.env.PORT || 5000;
 require("dotenv").config();
 
 // MIDDLEWARE //
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL,
+  })
+);
 app.use(express.json());
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.yy4jwyq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
@@ -21,7 +25,7 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    await client.connect();
+    // await client.connect();
 
     const craftCollection = client.db("craftItemDB").collection("craftItem");
     const canvasCollection = client
@@ -103,7 +107,7 @@ async function run() {
       const result = await craftCollection.deleteOne(query);
       res.send(result);
     });
-    await client.db("admin").command({ ping: 1 });
+    // await client.db("admin").command({ ping: 1 });
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
     );
