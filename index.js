@@ -56,11 +56,7 @@ async function run() {
       res.send(result);
     });
 
-    // app.get('/craftitem/:subcategory_Name' , async(req, res) => {
-    //   const subCategory = req.params.subcategory_Name;
-    //   const query = {subcategory_Name : new ObjectId(subcategory_Name)};
-    //   const result = await craftCollection.find(query)
-    // })
+
 
    
     // app.get(`/craftitem/:subcategory_Name`, async(req, res) => {
@@ -137,7 +133,6 @@ async function run() {
       "Pinged your deployment. You successfully connected to MongoDB!"
     );
   } finally {
-    // Ensures that the client will close when you finish/error
     // await client.close();
   }
 }
